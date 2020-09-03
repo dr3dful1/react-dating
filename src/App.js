@@ -1,102 +1,79 @@
 import React, {useState} from 'react';
- 
-import './App.css';
-import { Form, Button,Alert } from 'react-bootstrap';
-
-
-//1.create form
-//2.state
-//3.form validations
-//4 ?
-
+import {Form, Button, Alert} from 'react-bootstrap'
 
 function App() {
 
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")    
+    const [emailError, setEmailError] = useState("")
+    const [passwordError, setPasswordError] = useState("")        
 
-  const [email, setEmail]= useState("")
-  const  [password, setPassword] = useState("")
-  // const [username, setUsername] = useState ("")
-  // const  [confirmPassword, setConfirmPassword] = useState("")
-  
-  const [emailError, setEmailError]= useState("")
-  const  [passwordError, setPasswordError] = useState("")
-  // const [usernameError, setUsernameError] = useState ("")
-  // const  [confirmPasswordError, setConfirmPasswordError] = useState("")
+    const handleSubmit = event => {
+        event.preventDefault();     
+        var emailValid = false;
+        if(email.length == 0){
+            setEmailError("Email is required");
+        }        
+        else if(email.length < 6){
+            setEmailError("Email should be minimum 6 characters");
+        }      
+        else if(email.indexOf(' ') >= 0){        
+            setEmailError('Email cannot contain spaces');                          
+        }    
+        else{
+            setEmailError("")
+            emailValid = true
+        }
 
-  const handleSubmit = event => {
-    event.preventDefault( );
+        var passwordValid = false;
+        if(password.length == 0){
+            setPasswordError("Password is required");
+        }        
+        else if(password.length < 6){
+            setPasswordError("Password should be minimum 6 characters");
+        }      
+        else if(password.indexOf(' ') >= 0){        
+            setPasswordError('Password cannot contain spaces');                          
+        }    
+        else{
+            setPasswordError("")
+            passwordValid = true
+        }        
 
-    var emailValid = false;
-
-    if(email.length == 0){
-      setEmailError("email is required")
+        if(emailValid && passwordValid){            
+            alert('Email: ' + email + '\nPassword: ' + password); 
+            setEmail("");
+            setPassword("");
+        }              
     }
-    else if(email.length<6){
-      setEmailError("email cant be less than 6 chars")
-    }
-    else if(email.indexOf('') >=0){
-      setEmailError("email cant contain spaces")
-    }
-    else{
-      setEmailError(" ")
-        emailValid = true
-      
-    }
-    if(emailValid){
-      alert('Email:' + email + '\nPassword:' + password )
-    }
 
+    return (
+        <div>
+        <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formBasicEmail">
+            <Form.Label>Email address</Form.Label>
+            <Form.Control type="email" placeholder="Enter email" onChange={event => setEmail(event.target.value)} value={email}/>
+            <Form.Text className="text-muted">
+                We'll never share your email with anyone else.
+            </Form.Text>
+            </Form.Group>
+            {emailError.length > 0 &&
+            <Alert variant="danger">{emailError}</Alert>}
 
-  }
-
-  return (
-    <div className="App">
-      <Form onSubmit={handleSubmit}>
-
-        {/* <Form.Group>
-          <Form.Label>
-          please choose username
-          </Form.Label>
-          <Form.Control  type="input" placeholder="please choose username" onChange={event => setUsername(event.target.value)} />
-          {username}
-         
-        </Form.Group> */}
-
-        <Form.Group>
-          <Form.Label>
-             never share your email
-          </Form.Label>
-          <Form.Control  type="email" placeholder="enter Email"  onChange={event => setEmail(event.target.value)}/>
-          {email}
-        </Form.Group>
-
-
-        <Form.Group>
-          <Form.Label>
-          please choose password
-          </Form.Label>
-          <Form.Control  type="password" placeholder="must be at least 6 characters" onChange={event => setPassword(event.target.value)}/>
-          {password}
-        </Form.Group>
-{/* 
-        <Form.Group>
-          <Form.Label>
-          please confirm password
-          </Form.Label>
-          <Form.Control  type="password" placeholder="must be at least 6 characters" />
-        </Form.Group> */}
-
-        
-        <Button variant="primary" type="submit" >
-          Submit
-        </Button>
-
-
-      </Form>
-        {email}
-        
-    </div>
-  );
+            <Form.Group controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" placeholder="Password" onChange={event => setPassword(event.target.value)} value={password}/>
+            </Form.Group> 
+            {passwordError.length > 0 &&
+            <Alert variant="danger">{passwordError}</Alert>}           
+            <Button variant="primary" type="submit">
+            Submit
+            </Button>
+        </Form>  
+        Email entered: {email}  
+        <br />
+        Password entered: {password}              
+        </div>
+    );
 }
-
 export default App;
